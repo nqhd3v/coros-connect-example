@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .head { fill: #171717; }
+    .face { fill: #fafafa; stroke: #fafafa; }
+    @media (prefers-color-scheme: dark) {
+      .head { fill: #fafafa; }
+      .face { fill: #171717; stroke: #171717; }
+    }
+  </style>
+  <path class="head" d="M5 14 L6 3 L12.5 9 Q16 8 19.5 9 L26 3 L27 14 Q28 27 16 28 Q4 27 5 14 Z" />
+  <ellipse class="face" cx="11.5" cy="16.5" rx="1.6" ry="2.3" />
+  <ellipse class="face" cx="20.5" cy="16.5" rx="1.6" ry="2.3" />
+  <path class="face" d="M14.6 20.4 L17.4 20.4 L16 22 Z" stroke-linejoin="round" stroke-width="0.6" />
+  <g class="face" stroke-width="0.8" stroke-linecap="round">
+    <line x1="7" y1="20.5" x2="11.5" y2="21.2" />
+    <line x1="7.5" y1="23.2" x2="11.5" y2="22.4" />
+    <line x1="25" y1="20.5" x2="20.5" y2="21.2" />
+    <line x1="24.5" y1="23.2" x2="20.5" y2="22.4" />
+  </g>
+</svg>
