@@ -11,10 +11,14 @@ export async function proxy(request: NextRequest) {
   const current = request.cookies.get(COOKIE_NAME)?.value;
   if (!current) return NextResponse.next();
 
-  const refreshed = await refreshCredentialsCookie(current);
+  const refreshed = await refreshCredentialsCookie(
+    current,
+    request.nextUrl.origin,
+  );
   if (!refreshed) return NextResponse.next();
 
-  const response = NextResponse.next();
+  request.cookies.set(COOKIE_NAME, refreshed);
+  const response = NextResponse.next({ request: { headers: request.headers } });
   response.cookies.set(COOKIE_NAME, refreshed, cookieOptions);
   return response;
 }

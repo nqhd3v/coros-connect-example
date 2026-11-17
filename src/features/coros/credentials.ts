@@ -13,7 +13,7 @@ export const cookieOptions = {
   secure: true,
 } as const;
 
-export const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_PATH}/auth/coros`;
+export const getRedirectUrl = (origin: string) => `${origin}/auth/coros`;
 
 const EXPIRY_MARGIN_MS = 60_000;
 
@@ -36,6 +36,7 @@ const needsRefresh = (credentials: StoredCredentials) =>
 
 export const refreshCredentialsCookie = async (
   value: string,
+  origin: string,
 ): Promise<string | null> => {
   let credentials: StoredCredentials;
   try {
@@ -47,7 +48,7 @@ export const refreshCredentialsCookie = async (
 
   let latest: CorosCredentials | null = null;
   const client = new CorosConnect({
-    redirect: redirectUrl,
+    redirect: getRedirectUrl(origin),
     credentials,
     onCredentials: (next) => {
       latest = next;
