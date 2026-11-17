@@ -1,33 +1,23 @@
 "use server";
 
 import CorosConnect, { CorosCredentials } from "@nqhd3v/coros-connect";
-import { decrypt, encrypt } from "@nqhd3v/coros-connect/crypto";
 import { cookies } from "next/headers";
+import {
+  COOKIE_NAME,
+  cookieOptions,
+  decodeCredentials,
+  encodeCredentials,
+  redirectUrl,
+} from "./credentials";
 
 type Handler = CorosConnect["availableTools"]["handler"];
-
-const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_PATH}/auth/coros`;
-
-const encryptData = async (input: string) =>
-  encrypt(input, process.env.ENC_SECRET_STR);
-
-const decryptData = async (input: string) =>
-  decrypt(input, process.env.ENC_SECRET_STR);
 
 const isTypedTool = (handler: Handler, name: string): name is keyof Handler =>
   Object.hasOwn(handler, name);
 
-const isHttpOnly = process.env.NODE_ENV === "production";
-
 export const saveCredential = async (credentials: CorosCredentials) => {
   const cki = await cookies();
-
-  const txt = await encryptData(JSON.stringify(credentials));
-  cki.set("coros-client", txt, {
-    sameSite: true,
-    httpOnly: isHttpOnly,
-    secure: true,
-  });
+  cki.set(COOKIE_NAME, encodeCredentials(credentials), cookieOptions);
 };
 
 const getCoros = async (
@@ -37,13 +27,12 @@ const getCoros = async (
   client: CorosConnect;
 }> => {
   const cki = await cookies();
-  const ckiValue = cki.get("coros-client");
+  const ckiValue = cki.get(COOKIE_NAME);
   try {
     if (!ckiValue || !ckiValue.value) {
       throw new Error("no cookies setup yet");
     }
-    const dataStr = await decryptData(ckiValue.value);
-    const data = JSON.parse(dataStr);
+    const data = decodeCredentials(ckiValue.value);
     const client = new CorosConnect({
       redirect: redirectUrl,
       credentials: data,
@@ -67,7 +56,7 @@ const getCoros = async (
 
 export const clearCookie = async () => {
   const cki = await cookies();
-  cki.delete("coros-client");
+  cki.delete(COOKIE_NAME);
 };
 
 export const checkCorosConnectState = async () => {

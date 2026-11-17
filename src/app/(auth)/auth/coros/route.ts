@@ -6,14 +6,15 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
 
+  let isVerified = false;
   try {
     if (!code) {
       throw new Error("no code returns by COROS");
     }
-    await handleCorosAuthCode(code);
-    return redirect(`/?result=done`);
+    isVerified = await handleCorosAuthCode(code);
   } catch (e) {
     console.info("Failed to authorize:", (e as Error).message);
-    return redirect("/?result=failed");
   }
+
+  redirect(isVerified ? "/?result=done" : "/?result=failed");
 }
