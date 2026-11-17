@@ -1,9 +1,13 @@
+import { connection } from "next/server";
 import { checkCorosConnectState, getCorosTools } from "./actions";
 import { FeaturePicker } from "./feature";
 import LoginCoros from "./login-button";
 import { AuthorizationResult } from "./result";
 
 export async function CorosFeatures({ result }: { result?: string }) {
+  // COROS calls hit the network with live tokens; never run them in a
+  // prerender (runtime prefetch aborts fetch -> looks logged out)
+  await connection();
   const isConnected = await checkCorosConnectState();
 
   if (!isConnected) {
