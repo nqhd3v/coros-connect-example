@@ -8,12 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shared/components/atoms/select";
-import { queryCoros } from "./actions";
+import { logout, queryCoros } from "./actions";
 import { toast } from "@shared/components/atoms/toast";
 import { useState } from "react";
 import { cn } from "cn";
 import { CopyIcon, SpinnerIcon } from "@phosphor-icons/react";
-import Link from "next/link";
 
 export const FeaturePicker = ({
   tools,
@@ -97,12 +96,15 @@ export const FeaturePicker = ({
         {loading && <SpinnerIcon className="animate-spin" />}
       </div>
 
-      <Link
-        href="/auth/logout"
-        className="text-gray-400 text-xs italic underline"
-      >
-        Logout
-      </Link>
+      {/* server action, not a GET link: production prefetch would log out */}
+      <form action={logout}>
+        <button
+          type="submit"
+          className="text-gray-400 text-xs italic underline cursor-pointer"
+        >
+          Logout
+        </button>
+      </form>
     </>
   );
 };
