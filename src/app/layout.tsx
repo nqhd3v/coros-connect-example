@@ -1,9 +1,11 @@
+import { Author } from "@shared/components/atoms/author";
+import { Toaster } from "@shared/components/atoms/toast";
+import { cn } from "@shared/lib/utils";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
-import { cn } from "@shared/lib/utils";
-import { Toaster } from "@shared/components/atoms/toast";
+import { Suspense } from "react";
 import "./globals.css";
-import Link from "next/link";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -23,16 +25,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col relative">
         {children}
-        <span className="text-xs text-gray-600 font-thin absolute bottom-5 left-1/2 -translate-x-1/2">
-          a product developed by&nbsp;
-          <Link
-            href="https://github.com/nqhd3v"
-            target="_blank"
-            className="text-gray-900 font-normal"
-          >
-            @nqhd3v
-          </Link>
-        </span>
+        <Suspense>
+          <Author />
+        </Suspense>
+        <Suspense>
+          <Analytics />
+        </Suspense>
       </body>
       <Toaster />
     </html>

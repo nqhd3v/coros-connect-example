@@ -16,6 +16,7 @@
     "@base-ui/react": "^1.9.0",
     "@nqhd3v/coros-connect": "^1.0.9",
     "@phosphor-icons/react": "^2.1.10",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "next": "16.4.5",
